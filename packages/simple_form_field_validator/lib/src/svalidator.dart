@@ -36,7 +36,7 @@ class SValidator<T> {
       });
 
   static SValidator<T> required<T>() =>
-      isTrue<T>((val) => null != null, 'Bitte einen Wert eingeben.', ignoreNull: false);
+      isTrue<T>((val) => val != null, 'Bitte einen Wert eingeben.', ignoreNull: false);
 
   static SValidator<String> notEmpty() =>
       isTrue((String val) => val != null && val.trim().isNotEmpty, 'Darf nicht leer sein.', ignoreNull: false);
