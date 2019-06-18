@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import 'package:flutter/foundation.dart';
+
 /// Simple validator helpers
 class SValidator<T> {
   SValidator(this.validators);
@@ -52,6 +54,10 @@ class SValidator<T> {
   static SValidator<String> numberIsInRange(
           {int minValue, int maxValue, String message = 'Bitte eine gültige Zahl eingeben.'}) =>
       isTrue<String>((val) => _isInRange(int.parse(val), minValue: minValue, maxValue: maxValue), message);
+
+  /// make one specific value invalid, typical example having a server side "Invalid Password" error message.
+  static SValidator<T> invalidValue<T>({T invalidValue, String message}) =>
+      isTrue<T>((val) => val != invalidValue, message);
 
   String call(T val) {
     for (var validate in validators) {
