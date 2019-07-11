@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-import 'package:flutter/foundation.dart';
-
 /// Simple validator helpers
 class SValidator<T> {
   SValidator(this.validators);
