@@ -35,11 +35,11 @@ class SValidator<T> {
         return null;
       });
 
-  static SValidator<T> required<T>() =>
-      isTrue<T>((val) => val != null, 'Bitte einen Wert eingeben.', ignoreNull: false);
+  static SValidator<T> required<T>({String msg = 'Bitte einen Wert eingeben'}) =>
+      isTrue<T>((val) => val != null, msg, ignoreNull: false);
 
-  static SValidator<String> notEmpty() =>
-      isTrue((String val) => val != null && val.trim().isNotEmpty, 'Darf nicht leer sein.', ignoreNull: false);
+  static SValidator<String> notEmpty({String msg = 'Darf nicht leer sein.'}) =>
+      isTrue((String val) => val != null && val.trim().isNotEmpty, msg, ignoreNull: false);
 
   static SValidator<String> email() => isTrue((val) => val.contains('@'), 'Bitte eine gültige E-Mail Adresse angeben.');
 
