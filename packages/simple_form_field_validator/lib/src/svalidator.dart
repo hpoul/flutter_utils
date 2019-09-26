@@ -55,8 +55,8 @@ class SValidator<T> {
       isTrue<String>((val) => _isInRange(int.parse(val), minValue: minValue, maxValue: maxValue), message);
 
   /// make one specific value invalid, typical example having a server side "Invalid Password" error message.
-  static SValidator<T> invalidValue<T>({T invalidValue, String message}) =>
-      isTrue<T>((val) => val != invalidValue, message);
+  static SValidator<T> invalidValue<T>({T Function() invalidValue, String message}) =>
+      isTrue<T>((val) => val != invalidValue(), message);
 
   String call(T val) {
     for (var validate in validators) {
