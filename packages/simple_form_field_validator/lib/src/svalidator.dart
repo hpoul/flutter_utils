@@ -11,7 +11,8 @@ class SValidator<T> {
   static final _phoneMatcher = RegExp(r'^\+?[\d ]+$');
   static final _numberMatcher = RegExp(r'^[\d]+$');
 
-  static FormFieldValidator<T> combine<T>(List<FormFieldValidator<T>> validators) {
+  static FormFieldValidator<T> combine<T>(
+      List<FormFieldValidator<T>> validators) {
     return SValidator(validators);
   }
 
@@ -19,7 +20,9 @@ class SValidator<T> {
     return SValidator(validators + other.validators);
   }
 
-  static SValidator<T> isTrue<T>(bool predicate(T val), String errorMessage, {bool ignoreNull = true}) =>
+  static SValidator<T> isTrue<T>(
+          bool Function(T val) predicate, String errorMessage,
+          {bool ignoreNull = true}) =>
       SValidator.singleton((T val) {
         if (ignoreNull) {
           if (val == null) {
@@ -35,27 +38,37 @@ class SValidator<T> {
         return null;
       });
 
-  static SValidator<T> required<T>({String msg = 'Bitte einen Wert eingeben'}) =>
+  static SValidator<T> required<T>(
+          {String msg = 'Bitte einen Wert eingeben'}) =>
       isTrue<T>((val) => val != null, msg, ignoreNull: false);
 
   static SValidator<String> notEmpty({String msg = 'Darf nicht leer sein.'}) =>
-      isTrue((String val) => val != null && val.trim().isNotEmpty, msg, ignoreNull: false);
+      isTrue((String val) => val != null && val.trim().isNotEmpty, msg,
+          ignoreNull: false);
 
-  static SValidator<String> email({String msg = 'Bitte eine gültige E-Mail Adresse angeben.'}) =>
+  static SValidator<String> email(
+          {String msg = 'Bitte eine gültige E-Mail Adresse angeben.'}) =>
       isTrue((val) => val.contains('@'), msg);
 
-  static SValidator<String> phone() =>
-      isTrue((val) => _phoneMatcher.hasMatch(val), 'Bitte eine gültige Telefonnummer angeben.');
+  static SValidator<String> phone() => isTrue(
+      (val) => _phoneMatcher.hasMatch(val),
+      'Bitte eine gültige Telefonnummer angeben.');
 
-  static SValidator<String> number() =>
-      isTrue<String>((val) => _numberMatcher.hasMatch(val), 'Bitte eine ganze Zahl eingeben.');
+  static SValidator<String> number() => isTrue<String>(
+      (val) => _numberMatcher.hasMatch(val), 'Bitte eine ganze Zahl eingeben.');
 
   static SValidator<String> numberIsInRange(
-          {int minValue, int maxValue, String message = 'Bitte eine gültige Zahl eingeben.'}) =>
-      isTrue<String>((val) => _isInRange(int.parse(val), minValue: minValue, maxValue: maxValue), message);
+          {int minValue,
+          int maxValue,
+          String message = 'Bitte eine gültige Zahl eingeben.'}) =>
+      isTrue<String>(
+          (val) => _isInRange(int.parse(val),
+              minValue: minValue, maxValue: maxValue),
+          message);
 
   /// make one specific value invalid, typical example having a server side "Invalid Password" error message.
-  static SValidator<T> invalidValue<T>({T Function() invalidValue, String message}) =>
+  static SValidator<T> invalidValue<T>(
+          {T Function() invalidValue, String message}) =>
       isTrue<T>((val) => val != invalidValue(), message);
 
   String call(T val) {
