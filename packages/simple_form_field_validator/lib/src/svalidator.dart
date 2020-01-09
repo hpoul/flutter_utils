@@ -66,6 +66,13 @@ class SValidator<T> {
               minValue: minValue, maxValue: maxValue),
           message);
 
+  static SValidator<DateTime> dateIsInRange({
+    DateTime minValue,
+    String message,
+  }) =>
+      isTrue<DateTime>((val) => minValue == null || val.isAfter(minValue),
+          message = message);
+
   /// make one specific value invalid, typical example having a server side "Invalid Password" error message.
   static SValidator<T> invalidValue<T>(
           {T Function() invalidValue, String message}) =>
