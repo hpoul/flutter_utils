@@ -13,7 +13,7 @@ class SValidator<T> {
 
   static FormFieldValidator<T> combine<T>(
       List<FormFieldValidator<T>> validators) {
-    return SValidator(validators);
+    return SValidator(validators) as String? Function(T?);
   }
 
   SValidator<T> operator +(SValidator<T> other) {
@@ -21,9 +21,9 @@ class SValidator<T> {
   }
 
   static SValidator<T> isTrue<T>(
-          bool Function(T val) predicate, String errorMessage,
+          bool Function(T? val) predicate, String? errorMessage,
           {bool ignoreNull = true}) =>
-      SValidator.singleton((T val) {
+      SValidator.singleton((T? val) {
         if (ignoreNull) {
           if (val == null) {
             return null;
@@ -43,42 +43,42 @@ class SValidator<T> {
       isTrue<T>((val) => val != null, msg, ignoreNull: false);
 
   static SValidator<String> notEmpty({String msg = 'Darf nicht leer sein.'}) =>
-      isTrue((String val) => val != null && val.trim().isNotEmpty, msg,
+      isTrue((String? val) => val != null && val.trim().isNotEmpty, msg,
           ignoreNull: false);
 
   static SValidator<String> email(
           {String msg = 'Bitte eine gültige E-Mail Adresse angeben.'}) =>
-      isTrue((val) => val.contains('@'), msg);
+      isTrue((val) => val!.contains('@'), msg);
 
   static SValidator<String> phone() => isTrue(
-      (val) => _phoneMatcher.hasMatch(val),
+      (val) => _phoneMatcher.hasMatch(val!),
       'Bitte eine gültige Telefonnummer angeben.');
 
   static SValidator<String> number() => isTrue<String>(
-      (val) => _numberMatcher.hasMatch(val), 'Bitte eine ganze Zahl eingeben.');
+      (val) => _numberMatcher.hasMatch(val!), 'Bitte eine ganze Zahl eingeben.');
 
   static SValidator<String> numberIsInRange(
-          {int minValue,
-          int maxValue,
+          {int? minValue,
+          int? maxValue,
           String message = 'Bitte eine gültige Zahl eingeben.'}) =>
       isTrue<String>(
-          (val) => _isInRange(int.parse(val),
+          (val) => _isInRange(int.parse(val!),
               minValue: minValue, maxValue: maxValue),
           message);
 
   static SValidator<DateTime> dateIsInRange({
-    DateTime minValue,
-    String message,
+    DateTime? minValue,
+    String? message,
   }) =>
-      isTrue<DateTime>((val) => minValue == null || val.isAfter(minValue),
+      isTrue<DateTime>((val) => minValue == null || val!.isAfter(minValue),
           message = message);
 
   /// make one specific value invalid, typical example having a server side "Invalid Password" error message.
   static SValidator<T> invalidValue<T>(
-          {T Function() invalidValue, String message}) =>
-      isTrue<T>((val) => val != invalidValue(), message);
+          {T Function()? invalidValue, String? message}) =>
+      isTrue<T>((val) => val != invalidValue!(), message);
 
-  String call(T val) {
+  String? call(T val) {
     for (var validate in validators) {
       final ret = validate(val);
       if (ret != null) {
@@ -88,7 +88,7 @@ class SValidator<T> {
     return null;
   }
 
-  static bool _isInRange(int val, {int minValue, int maxValue}) {
+  static bool _isInRange(int val, {int? minValue, int? maxValue}) {
     assert(minValue == null || maxValue == null || minValue < maxValue);
     if (minValue != null && minValue > val) {
       return false;
