@@ -55,7 +55,8 @@ class SValidator<T> {
       'Bitte eine gültige Telefonnummer angeben.');
 
   static SValidator<String> number() => isTrue<String>(
-      (val) => _numberMatcher.hasMatch(val!), 'Bitte eine ganze Zahl eingeben.');
+      (val) => _numberMatcher.hasMatch(val!),
+      'Bitte eine ganze Zahl eingeben.');
 
   static SValidator<String> numberIsInRange(
           {int? minValue,
@@ -78,7 +79,7 @@ class SValidator<T> {
           {T Function()? invalidValue, String? message}) =>
       isTrue<T>((val) => val != invalidValue!(), message);
 
-  String? call(T val) {
+  String? call(T? val) {
     for (var validate in validators) {
       final ret = validate(val);
       if (ret != null) {
