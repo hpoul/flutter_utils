@@ -76,8 +76,9 @@ class SValidator<T> {
 
   /// make one specific value invalid, typical example having a server side "Invalid Password" error message.
   static SValidator<T> invalidValue<T>(
-          {T Function()? invalidValue, String? message}) =>
-      isTrue<T>((val) => val != invalidValue!(), message);
+          {T? Function()? invalidValue, String? message}) =>
+      isTrue<T>(
+          (val) => invalidValue == null || val != invalidValue(), message);
 
   String? call(T? val) {
     for (var validate in validators) {
