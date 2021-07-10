@@ -1,14 +1,24 @@
 # simple_form_field_validator
 
-A new Flutter package project.
+Simple helper for easily validating form fields.
 
-## Getting Started
+For example:
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+```
+          TextFormField(
+            controller: _email,
+            decoration: const InputDecoration(
+              labelText: 'Enter email address to register or sign in.',
+              hintMaxLines: 2,
+            ),
+            keyboardType: TextInputType.emailAddress,
+            textCapitalization: TextCapitalization.none,
+            textInputAction: TextInputAction.send,
+            validator: SValidator.notEmpty(
+                        msg: 'Please enter a valid email address.') +
+                    SValidator.email(msg: 'Please enter a valid email address.')
+                as String? Function(String?)?,
+          ),
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```
+
